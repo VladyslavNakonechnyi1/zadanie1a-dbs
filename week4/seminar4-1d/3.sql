@@ -1,0 +1,19 @@
+WITH CustomerSales AS (
+    SELECT 
+        c.customer_name,
+        SUM(o.sales) AS total_sales
+    FROM 
+        customers c
+    JOIN 
+        orders o ON c.customer_id = o.customer_id
+    GROUP BY 
+        c.customer_name
+)
+SELECT 
+    customer_name,
+    total_sales,
+    NTILE(4) OVER (ORDER BY total_sales DESC) AS quartile
+FROM 
+    CustomerSales
+ORDER BY 
+    customer_name;
